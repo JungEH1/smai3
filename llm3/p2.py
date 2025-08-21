@@ -1,8 +1,10 @@
 import os
+import time
 
 import streamlit as st
 from PIL import Image
 from openai import images
+from MYLLM import geminiModel
 
 def save_uploadedfile(directory, file):
     # 1. 디렉토리가 없으면 생성
@@ -23,3 +25,22 @@ file = st.file_uploader('이미지 파일 업로드', type=['png', 'jpg', 'jpeg'
 if file:
     st.image(file)
     save_uploadedfile("img", file)
+
+    text=st.text_area(label="질문입력:", placeholder="질문을 입력 하세요")
+
+    if st.button("SEND"):
+        img=Image.open("img/"+file.name)
+        model=geminiModel()
+        response=model.generate_content([text,img])
+
+        # Progress Bar Start -----------------------------------------
+        progress_text = "Operation in progress. Please wait."
+        my_bar = st.progress(0, text=progress_text)
+        for percent_complete in range(100):
+            time.sleep(0.08)
+            my_bar.progress(percent_complete + 1, text=progress_text)
+        time.sleep(1)
+        # Progress Bar End -----------------------------------------
+
+        my_bar.empty()
+        st.info(response.text)
