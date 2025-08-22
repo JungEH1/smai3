@@ -6,8 +6,9 @@ page_2=st.Page("p2.py",title="page 2", icon="❄️")
 page_3=st.Page("p3.py",title="page 3", icon="❄️")
 page_4=st.Page("p4.py",title="page 4", icon="❄️")
 page_5=st.Page("p5.py",title="page 5", icon="❄️")
+page_6=st.Page("p6.py",title="page 6", icon="❄️")
 
 page = st.navigation([page_main, page_1, page_2, page_3
-                      ,page_4, page_5])
+                      ,page_4, page_5, page_6])
 
 page.run()
