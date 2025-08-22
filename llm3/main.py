@@ -1,4 +1,4 @@
 import streamlit as st
 
-st.markdown("Gemini AI M")
+st.markdown("Gemini AI Main Page")
 st.sidebar.markdown("Clicked Main Page")
