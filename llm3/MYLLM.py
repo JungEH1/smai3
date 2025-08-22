@@ -8,11 +8,34 @@ import os
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-GOOGLE_API_KEY=os.getenv("GOOGLE_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+
+def openAiModel():
+    client = OpenAI(api_key=OPENAI_API_KEY)
+    return client
+
+def makeMsg(system,user ):
+    messages = [
+        {"role": "system", "content": system},
+        {"role": "user", "content": user},
+    ]
+    return messages
+
+def openAiModelArg(model, msgs):
+    print(model)
+    print(msgs)
+    client = OpenAI(api_key=OPENAI_API_KEY)
+    response = client.chat.completions.create(
+        model=model,
+        messages=msgs
+    )
+    return response.choices[0].message.content
+
 def geminiModel():
     genai.configure(api_key=GOOGLE_API_KEY)
     model = genai.GenerativeModel("gemini-2.0-flash")
     return model
+
 def geminiTxt(txt):
     model = geminiModel()
     response = model.generate_content(txt)
@@ -38,7 +61,6 @@ def save_uploadedfile(directory, file, st):
     # 3. 저장 완료 메시지 출력
     st.success(f'저장 완료: {directory}에 {file.name} 저장되었습니다.')
 
-
 def progressBar(txt):
     # Progress Bar Start -----------------------------------------
     progress_text = txt
@@ -49,3 +71,16 @@ def progressBar(txt):
     time.sleep(1)
     return my_bar
     # Progress Bar End -----------------------------------------
+
+def  makeAudio(text,name):
+    if not os.path.exists("audio"):
+        os.makedirs("audio")
+    model = openAiModel()
+    response = model.audio.speech.create(
+        model="tts-1",
+        input=text,
+        voice="alloy",
+        response_format="mp3",
+        speed=1.1,
+    )
+    response.stream_to_file("audio/"+name)

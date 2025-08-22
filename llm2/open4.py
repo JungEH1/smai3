@@ -11,9 +11,7 @@ def test(prompt):
         response_format="mp3",
         speed=1.1,
     )
-
     response.stream_to_file(promptMp3)
-
 
     modelName="gpt-4o"
     msg = makeMsg("너는 친한 친구", prompt)
